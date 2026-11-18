@@ -7,12 +7,15 @@ class App {
     public function __construct() {
         $url = $this->parseURL();
 
-        if (isset($url[0]) && file_exists('../app/controllers/' . ucfirst($url[0]) . 'Controller.php')) {
+        // Gunakan __DIR__ agar path selalu akurat menuju folder app/controllers/
+        $controllerPath = __DIR__ . '/../app/controllers/';
+
+        if (isset($url[0]) && file_exists($controllerPath . ucfirst($url[0]) . 'Controller.php')) {
             $this->controller = ucfirst($url[0]) . 'Controller';
             unset($url[0]);
         }
 
-        require_once '../app/controllers/' . $this->controller . '.php';
+        require_once $controllerPath . $this->controller . '.php';
         $this->controller = new $this->controller;
 
         if (isset($url[1])) {
@@ -22,10 +25,7 @@ class App {
             }
         }
 
-        if (!empty($url)) {
-            $this->params = array_values($url);
-        }
-
+        $this->params = !empty($url) ? array_values($url) : [];
         call_user_func_array([$this->controller, $this->method], $this->params);
     }
 
@@ -33,8 +33,7 @@ class App {
         if (isset($_GET['url'])) {
             $url = rtrim($_GET['url'], '/');
             $url = filter_var($url, FILTER_SANITIZE_URL);
-            $url = explode('/', $url);
-            return $url;
+            return explode('/', $url);
         }
         return [];
     }

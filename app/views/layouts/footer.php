@@ -1,6 +1,5 @@
-</div>
-    <footer style="text-align: center; padding: 20px; margin-top: 40px; color: #777; font-size: 0.9em;">
-        &copy; 2026 DenimStore - Tugas UTS Pemrograman Web.
-    </footer>
+<footer style="text-align: center; padding: 30px; color: #777; font-size: 0.85rem; border-top: 1px solid #eee; margin-top: 50px;">
+    &copy; 2026 Denim Store MVC Project.
+</footer>
 </body>
 </html>
