@@ -1,54 +1,60 @@
-DenimStore - Custom MVC PHP (Tugas UTS)
+RAW & REFINED DENIM STORE (CUSTOM PHP MVC)
+
+==========================================
 
 
 
-Aplikasi web e-commerce katalog celana denim sederhana yang dibangun menggunakan PHP murni dengan arsitektur Model-View-Controller (MVC) kustom dari nol tanpa menggunakan framework besar (seperti Laravel atau CodeIgniter). Proyek ini dibuat untuk memenuhi tugas Ujian Tengah Semester (UTS) mata kuliah Pemrograman Web.
+A lightweight, modern e-commerce web application built from scratch using a Custom PHP MVC (Model-View-Controller) architecture and MySQL. Designed for managing premium denim apparel collections with full CRUD operations and image upload handling.
 
 
 
----
+--------------------------------------------------
+
+FEATURES
+
+--------------------------------------------------
+
+- Custom MVC Architecture: Clean separation of concerns with a custom router (App.php), controllers, models, and views.
+
+- Product Management (CRUD):
+
+  - Create: Add new denim products with categories, pricing, stock tracking, and image uploads.
+
+  - Read: Dynamic product catalog grid view with category badges and inventory status.
+
+  - Update: Edit existing product details and replace product images with automatic cleanup of old files.
+
+  - Delete: Remove products from the database along with their physical image files from the server.
+
+- Database Integration: Secure database queries using PHP PDO with prepared statements to prevent SQL injection.
+
+- Modern Responsive UI: Styled with a minimalist boutique aesthetic using the Inter font and CSS grid layouts.
 
 
 
-FITUR UTAMA
-
-- Arsitektur Custom MVC: Pemisahan yang jelas antara logika (Controller), struktur data (Model), dan antarmuka pengguna (View).
-
-- Front Controller & Routing Sederhana: Menggunakan URL bersih (Pretty URLs) berbasis .htaccess.
-
-- Katalog & Detail Produk: Menampilkan daftar produk celana denim lengkap dengan informasi harga, stok, dan deskripsi mendetail.
-
-- Keamanan Dasar: Penerapan htmlspecialchars() untuk mencegah kerentanan XSS (Cross-Site Scripting).
-
-- Desain Responsif: Tampilan storefront modern bernuansa butik denim profesional.
-
-
-
----
-
-
+--------------------------------------------------
 
 TECH STACK
 
-- Bahasa: PHP (Native / OOP)
+--------------------------------------------------
 
-- Database: MySQL (diakses menggunakan PDO / PHP Data Objects)
+- Backend: PHP (Object-Oriented Programming, Custom MVC)
 
-- Server: Apache (XAMPP) / PHP Built-in Development Server
+- Database: MySQL / MariaDB (managed via phpMyAdmin)
 
-- Frontend: HTML5, CSS3
+- Frontend: HTML5, CSS3 (Custom responsive styles)
 
-
-
----
+- Server Environment: XAMPP / PHP Built-in Server (php -S)
 
 
 
-STRUKTUR FOLDER PROYEK
+--------------------------------------------------
 
-denim-store/
+PROJECT DIRECTORY STRUCTURE
 
-│
+--------------------------------------------------
+
+denim_store/
 
 ├── app/
 
@@ -72,120 +78,146 @@ denim-store/
 
 │           ├── index.php
 
-│           └── detail.php
+│           ├── create.php
 
-│
+│           └── edit.php
 
 ├── core/
 
-│   ├── Database.php
+│   ├── App.php
 
 │   ├── Controller.php
 
-│   └── App.php
+│   └── Database.php
 
-│
+└── public/
 
-├── public/
+    ├── img/               # Uploaded product images
 
-│   ├── img/
+    ├── index.php
 
-│   │   ├── slim-fit.jpg
-
-│   │   ├── straight.jpg
-
-│   │   └── skinny.jpg
-
-│   └── index.php
-
-│
-
-├── .htaccess
-
-└── README.txt
+    └── router.php         # URL routing support for PHP built-in server
 
 
 
----
+--------------------------------------------------
+
+INSTALLATION & SETUP GUIDE
+
+--------------------------------------------------
 
 
 
-CARA MENJALANKAN PROYEK (INSTALLATION GUIDE)
+1. Prerequisites
+
+- Install XAMPP (or any local server environment with PHP 8.x and MySQL).
+
+- Git installed on your machine.
 
 
 
-1. Clone Repository
+2. Clone Repository / Download
 
-   git clone https://github.com/AripppMuhammad/denim-store.git
+Clone this repository into your XAMPP htdocs directory:
 
-   (Atau letakkan folder proyek ini langsung di direktori htdocs XAMPP Anda).
+cd C:\xampp\htdocs
 
+git clone https://github.com/AripppMuhammad/denim_store.git
 
-
-2. Konfigurasi Database
-
-   - Nyalakan Apache dan MySQL melalui XAMPP Control Panel.
-
-   - Buka phpMyAdmin di browser: http://localhost/phpmyadmin/
-
-   - Buat database baru dengan nama "denim_store".
-
-   - Masuk ke menu SQL, lalu jalankan query berikut:
+cd denim_store
 
 
 
-   CREATE TABLE products (
+3. Setup Database
 
-       id INT AUTO_INCREMENT PRIMARY KEY,
+- Open your browser and go to http://localhost/phpmyadmin/
 
-       name VARCHAR(100) NOT NULL,
+- Create a new database named "denim_store".
 
-       price DECIMAL(10,2) NOT NULL,
-
-       description TEXT,
-
-       stock INT NOT NULL,
-
-       image VARCHAR(255)
-
-   );
+- Run the following SQL script in the SQL tab to set up the schema and sample data:
 
 
 
-   INSERT INTO products (name, price, description, stock, image) VALUES 
+CREATE TABLE categories (
 
-   ('Classic Slim Fit Denim', 350000.00, 'Celana denim pria dengan potongan slim fit yang nyaman untuk aktivitas harian.', 25, 'slim-fit.jpg'),
+    id INT AUTO_INCREMENT PRIMARY KEY,
 
-   ('Vintage Straight Denim', 420000.00, 'Gaya klasik tahun 90-an dengan bahan denim tebal berkualitas tinggi.', 15, 'straight.jpg'),
+    name VARCHAR(50) NOT NULL
 
-   ('Dark Indigo Skinny Jeans', 375000.00, 'Denim elastis berwarna dark indigo dengan potongan pas di kaki.', 20, 'skinny.jpg');
-
-
-
-3. Menjalankan Server
-
-   Gunakan PHP Built-in Server melalui terminal/CMD:
-
-   cd path/to/denim-store
-
-   php -S localhost:8000 -t public
+);
 
 
 
-4. Akses Website
+CREATE TABLE products (
 
-   Buka browser Anda dan akses tautan berikut:
+    id INT AUTO_INCREMENT PRIMARY KEY,
 
-   http://localhost:8000/product
+    category_id INT,
+
+    name VARCHAR(100) NOT NULL,
+
+    price DECIMAL(10,2) NOT NULL,
+
+    description TEXT,
+
+    stock INT NOT NULL,
+
+    image VARCHAR(255),
+
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
+
+);
 
 
 
----
+INSERT INTO categories (name) VALUES ('Slim Fit'), ('Straight Fit'), ('Skinny Jeans');
 
 
+
+INSERT INTO products (category_id, name, price, description, stock, image) VALUES 
+
+(1, 'Classic Slim Fit Denim', 350000.00, 'Celana denim pria dengan potongan slim fit yang nyaman.', 25, 'default.jpg'),
+
+(2, 'Vintage Straight Denim', 420000.00, 'Gaya klasik tahun 90-an dengan bahan denim tebal.', 15, 'default.jpg');
+
+
+
+4. Configure Database Connection
+
+Verify your database credentials in core/Database.php:
+
+- $host = 'localhost';
+
+- $user = 'root';
+
+- $pass = '';
+
+- $db_name = 'denim_store';
+
+
+
+5. Run the Local Development Server
+
+Start the PHP built-in server using the provided router script:
+
+php -S localhost:8000 -t public public/router.php
+
+
+
+6. Access the Application
+
+Open your browser and navigate to:
+
+http://localhost:8000/product
+
+
+
+--------------------------------------------------
 
 AUTHOR
 
-- Nama: AripppMuhammad
+--------------------------------------------------
 
-- Keperluan: Tugas UTS Pemrograman Web
+- GitHub: @AripppMuhammad (https://github.com/AripppMuhammad)
+
+- University Student studying Informatics at Universitas Muhammadiyah Malang.
